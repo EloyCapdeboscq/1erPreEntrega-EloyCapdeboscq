@@ -1,21 +1,28 @@
-import { useState } from 'react'
+import { Navigate, Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 
-import { NavBar } from './components/NavBar/NavBar';
+import { Menu } from './components/Menu/Menu'
 import { ItemListContainer } from './components/ItemListCointainer/ItemListContainer'
+import { ItemDetailContainer } from './components/ItemDetailContainer/ItemDetailContainer'
+import { CartContainer } from './components/CartContainer/CartContainer'
 
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 
 
 function App() {
 
- return (
-    <div className="App">
-        <NavBar/>
-        <ItemListContainer greeting={"ItemListContainer"}/>
-    </div>
+  return (
+    <Router>
+      <Menu/> 
+      <Routes>
+        <Route path='/' element = {<ItemListContainer />} />
+        <Route path='/categoria/:categoria' element = {<ItemListContainer />} />
+        
+        <Route path='/detail/:pid' element = {<ItemDetailContainer />} />
+        <Route path='/cart' element = {<CartContainer />} />
+
+        <Route path = '*' element = {<Navigate to = {'/'} />} />
+      </Routes>
+    </Router>
   )
 }
 
