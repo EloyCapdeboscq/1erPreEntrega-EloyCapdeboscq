@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { mFetch } from "../../utils/mFetch"
 import { useParams } from "react-router-dom"
 import { ItemList } from "../ItemList/ItemList"
+import { Loading } from "../Loading/Loading"
+import { collection, getDocs, getFirestore, query, where } from "firebase/firestore"
 
 export const ItemListContainer = () => {
   const [productos, setProductos ] = useState([])
@@ -9,27 +10,24 @@ export const ItemListContainer = () => {
   const {categoria} = useParams()
 
   useEffect(()=>{
-    if (!categoria){
-      mFetch()
-      .then((resultado)=> {
-      setProductos(resultado)
-      })
+    const dbFirestore = getFirestore()
+    const queryCollection = collection(dbFirestore, 'productos')
+    const queryCollectionFiltered = !categoria ? queryCollection : query(queryCollection, where ('categoria', '==', categoria) )
+
+    getDocs(queryCollectionFiltered)
+      .then(res => setProductos (res.docs.map(producto => ({id: producto.id, ...producto.data()}))))
       .catch(error => console.log(error))
       .finally(()=> setIsLoading(false))
-    }else{
-      mFetch()
-      .then((resultado)=> {
-      setProductos(resultado.filter(producto => producto.categoria===categoria))
-      })
-      .catch(error => console.log(error))
-      .finally(()=> setIsLoading(false))
-    }
-  }, [categoria])
+  }, [categoria]) 
 
   return (
     IsLoading ?
-              <h2>Cargando...</h2>
-          :
-              <ItemList productos={productos}/>
+
+    <Loading/>
+    
+    :
+    
+    <ItemList productos={productos}/>
+   
   )
 }

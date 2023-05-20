@@ -1,6 +1,7 @@
 import { Item } from "../Item/Item"
 
 export const ItemList = ({productos}) => {
+
   return (
     <div style={{
         display: "flex",

@@ -6,10 +6,10 @@ export const ItemCount = ({initial = 1, stock = 5, onAdd}) => {
   
   return (
     <div>
-        <p> {counter}</p>
-        <button onClick={handleSumar}> + 1 </button>
-        <button onClick={handleRestar}> - 1 </button>
-        <button>Agregar al Carrito</button>
+      <p> {counter}</p>
+      <button onClick={handleSumar}> + 1 </button>      
+      <button onClick={handleRestar}> - 1 </button>
+      <button onClick={()=>{onAdd(counter)}}>Agregar al Carrito</button>
     </div>
   )
 }
